@@ -8,7 +8,7 @@ async function run() {
     const secretName = core.getInput('secret_name')
     const secretValue = core.getInput('secret_value')
 
-    await upsertSecret(secretName, secretValue, projectId)
+    await upsertSecret(projectId, secretName, secretValue)
   } catch (error) {
     core.error(error)
     core.setFailed(error.message)
