@@ -1,12 +1,14 @@
 name: 'Gcp Secrets'
 description: 'Upsert a secret on GCLOUD if is changed'
 inputs:
-  secret-name:  # id of input
+  secret_name:  # id of input
     description: 'The secret name'
     required: true
-  secret-value:  # id of input
+  secret_value:  # id of input
     description: 'The secret value'
     required: true
+  project_id:  # id of input
+    description: 'the project identifier'
 outputs:
   time: # output will be available to future steps
     description: 'The current time after waiting'

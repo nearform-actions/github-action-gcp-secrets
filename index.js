@@ -32,12 +32,14 @@ async function run() {
     //   )
     // }
 
-    const secretName = core.getInput('secret-name')
-    const secretValue = core.getInput('secret-value')
+    console.log(process.env)
+    const projectId = core.getInput('project_id')
+    const secretName = core.getInput('secret_name')
+    const secretValue = core.getInput('secret_value')
 
     console.log(`Update secret: ${secretName} with value: ${secretValue}`)
 
-    await upsertSecret(secretName, secretValue)
+    await upsertSecret(secretName, secretValue, projectId)
   } catch (error) {
     console.log(error)
     core.setFailed(error.message)
