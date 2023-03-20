@@ -35,7 +35,6 @@ jobs:
 
       - uses: ./
         with:
-          project_id: ${{ inputs.GCP_PROJECT_ID }}
           secret_name: 'projects/slack-kb-chatgpt-responder/secrets/test-action'
           secret_value: 'new-value'
 

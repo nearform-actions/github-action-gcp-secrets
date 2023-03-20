@@ -9,6 +9,7 @@ inputs:
     required: true
   project_id:  # id of input
     description: 'the project identifier'
+    required: false
 outputs:
   time: # output will be available to future steps
     description: 'The current time after waiting'
