@@ -17,35 +17,70 @@ async function existsSecret(secretName, client) {
   }
 }
 
-async function upsertSecret(secretName, newValue) {
+async function shouldUpdateVersion(secretName, newValue, client) {
   try {
+    const [version] = await client.accessSecretVersion({
+      name: `${secretName}/versions/latest`
+    })
+    const payload = version.payload.data.toString()
+
+    return payload !== newValue
+  } catch (e) {
+    if (e.message.startsWith('5 NOT_FOUND:')) {
+      return true
+    }
+
+    throw e
+  }
+}
+
+async function upsertSecret(projectId, secretName, newValue) {
+  try {
+    const parent = `projects/${projectId}`
+    const fullSecretName = `${parent}/secrets/${secretName}`
     // `who-to-greet` input defined in action metadata file
-    console.log(`Update secret: ${secretName} with value: ${newValue}`)
+    core.info(`Update secret: ${fullSecretName}`)
 
     // slack-kb-chatgpt-responder
     const client = new SecretManagerServiceClient()
 
-    const exists = await existsSecret(secretName, client)
+    const exists = await existsSecret(fullSecretName, client)
 
     if (!exists) {
-      client.createSecret()
+      core.info('The secret does not exist, create a new one.')
+      client.createSecret({
+        parent,
+        secretId: secretName,
+        secret: {
+          replication: {
+            automatic: {}
+          }
+        }
+      })
+    } else {
+      core.info('The secret already exists.')
     }
-    console.log(exists)
-    // const [secret] = await client.getSecret({
-    //   name: secretName
-    // })
-    //
-    // console.log(secret)
-    //
-    // const [version] = await client.accessSecretVersion({
-    //   name: `${secretName}/versions/latest`
-    // })
-    // console.log(version)
-    //
-    // const payload = version.payload.data.toString()
-    // console.log(payload)
-    //
-    // return time
+    const shouldUpdate = await shouldUpdateVersion(
+      fullSecretName,
+      newValue,
+      client
+    )
+
+    if (shouldUpdate) {
+      core.info('The secret version requires to be updated.')
+      const payload = Buffer.from(newValue, 'utf8')
+      const [version] = await client.addSecretVersion({
+        parent: fullSecretName,
+        payload: {
+          data: payload
+        }
+      })
+
+      core.info(`Added secret version ${version.name}`)
+    } else {
+      core.info('The secret version does not require to be updated.')
+    }
+    return
   } catch (error) {
     console.log(error)
     core.setFailed(error.message)
