@@ -39,7 +39,7 @@ async function upsertSecret(projectId, secretName, newValue) {
     const parent = `projects/${projectId}`
     const fullSecretName = `${parent}/secrets/${secretName}`
     // `who-to-greet` input defined in action metadata file
-    core.info(`Update secret: ${fullSecretName}`)
+    core.info(`Create or update secret: ${fullSecretName}`)
 
     // slack-kb-chatgpt-responder
     const client = new SecretManagerServiceClient()
