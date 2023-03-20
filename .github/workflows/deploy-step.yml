@@ -35,8 +35,8 @@ jobs:
 
       - uses: ./
         with:
-          secret_name: 'projects/slack-kb-chatgpt-responder/secrets/test-action'
-          secret_value: 'new-value'
+          secret_name: test-action
+          secret_value: ${{ secrets.TEST_SECRET_VALUE }}
 
       - name: 'Show summary'
         run: >-
