@@ -32,23 +32,17 @@ const upsertSecret = t.mock('../src/upsert-secret', {
 })
 
 t.beforeEach(() => {
-  mockCreateSecret.reset()
-  mockAccessSecretVersion.reset()
-  mockAddSecretVersion.reset()
-  mockGetSecret.reset()
-  mockLoggerInfo.reset()
-  mockLoggerError.reset()
-  mockSetFailed.reset()
+  sinon.reset()
 })
 
-t.test('the secret does not exists', async t => {
+t.test('the secret does not exists', async () => {
   const projectId = 'proj1'
   const secretName = 'secret-name'
   const newValue = 'secret-value'
 
   mockGetSecret
     .withArgs({ name: `projects/${projectId}/secrets/${secretName}` })
-    .throws(new Error('5 NOT_FOUND:'))
+    .rejects(new Error('5 NOT_FOUND:'))
 
   mockCreateSecret
     .withArgs({
@@ -56,13 +50,13 @@ t.test('the secret does not exists', async t => {
       secretId: secretName,
       secret: { replication: { automatic: {} } }
     })
-    .returns(Promise.resolve())
+    .resolves()
 
   mockAccessSecretVersion
     .withArgs({
       name: `projects/${projectId}/secrets/${secretName}/versions/latest`
     })
-    .throws(new Error('5 NOT_FOUND:'))
+    .rejects(new Error('5 NOT_FOUND:'))
 
   mockAddSecretVersion
     .withArgs({
@@ -71,42 +65,39 @@ t.test('the secret does not exists', async t => {
         data: Buffer.from(newValue, 'utf8')
       }
     })
-    .returns(Promise.resolve([{ name: 1 }]))
+    .resolves([{ name: 1 }])
 
   await upsertSecret(projectId, secretName, newValue)
 
-  t.ok(mockCreateSecret.calledOnce)
-  t.ok(
-    mockLoggerInfo.calledWith(
-      `Create or update secret: projects/${projectId}/secrets/${secretName}`
-    )
+  sinon.assert.calledOnce(mockCreateSecret)
+  sinon.assert.calledWith(
+    mockLoggerInfo,
+    `Create or update secret: projects/${projectId}/secrets/${secretName}`
   )
-  t.ok(mockLoggerInfo.calledWith('Added secret version 1'))
+  sinon.assert.calledWith(mockLoggerInfo, 'Added secret version 1')
 })
 
-t.test('the secret exists and and has different value', async t => {
+t.test('the secret exists and and has different value', async () => {
   const projectId = 'proj1'
   const secretName = 'secret-name'
   const newValue = 'secret-value'
 
   mockGetSecret
     .withArgs({ name: `projects/${projectId}/secrets/${secretName}` })
-    .returns(Promise.resolve)
+    .resolves()
 
   mockAccessSecretVersion
     .withArgs({
       name: `projects/${projectId}/secrets/${secretName}/versions/latest`
     })
-    .returns(
-      Promise.resolve([
-        {
-          name: `projects/${projectId}/secrets/test-action2/versions/1`,
-          payload: {
-            data: Buffer.from('different secret')
-          }
+    .resolves([
+      {
+        name: `projects/${projectId}/secrets/test-action2/versions/1`,
+        payload: {
+          data: Buffer.from('different secret')
         }
-      ])
-    )
+      }
+    ])
 
   mockAddSecretVersion
     .withArgs({
@@ -115,43 +106,41 @@ t.test('the secret exists and and has different value', async t => {
         data: Buffer.from(newValue, 'utf8')
       }
     })
-    .returns(Promise.resolve([{ name: 2 }]))
+    .resolves([{ name: 2 }])
 
   await upsertSecret(projectId, secretName, newValue)
 
-  t.notOk(mockCreateSecret.calledOnce)
-  t.ok(
-    mockLoggerInfo.calledWith(
-      `Create or update secret: projects/${projectId}/secrets/${secretName}`
-    )
+  sinon.assert.notCalled(mockCreateSecret)
+  sinon.assert.calledWith(
+    mockLoggerInfo,
+    `Create or update secret: projects/${projectId}/secrets/${secretName}`
   )
-  t.ok(mockLoggerInfo.calledWith('The secret already exists.'))
-  t.ok(mockLoggerInfo.calledWith('Added secret version 2'))
+
+  sinon.assert.calledWith(mockLoggerInfo, 'The secret already exists.')
+  sinon.assert.calledWith(mockLoggerInfo, 'Added secret version 2')
 })
 
-t.test('the secret exists and has the same value', async t => {
+t.test('the secret exists and has the same value', async () => {
   const projectId = 'proj1'
   const secretName = 'secret-name'
   const newValue = 'secret-value'
 
   mockGetSecret
     .withArgs({ name: `projects/${projectId}/secrets/${secretName}` })
-    .returns(Promise.resolve)
+    .resolves()
 
   mockAccessSecretVersion
     .withArgs({
       name: `projects/${projectId}/secrets/${secretName}/versions/latest`
     })
-    .returns(
-      Promise.resolve([
-        {
-          name: `projects/${projectId}/secrets/test-action2/versions/1`,
-          payload: {
-            data: Buffer.from(newValue)
-          }
+    .resolves([
+      {
+        name: `projects/${projectId}/secrets/test-action2/versions/1`,
+        payload: {
+          data: Buffer.from(newValue)
         }
-      ])
-    )
+      }
+    ])
 
   mockAddSecretVersion
     .withArgs({
@@ -160,53 +149,51 @@ t.test('the secret exists and has the same value', async t => {
         data: Buffer.from(newValue, 'utf8')
       }
     })
-    .returns(Promise.resolve([{ name: 2 }]))
+    .resolves([{ name: 2 }])
 
   await upsertSecret(projectId, secretName, newValue)
 
-  t.notOk(mockCreateSecret.calledOnce)
-  t.ok(
-    mockLoggerInfo.calledWith(
-      `Create or update secret: projects/${projectId}/secrets/${secretName}`
-    )
+  sinon.assert.notCalled(mockCreateSecret)
+  sinon.assert.calledWith(
+    mockLoggerInfo,
+    `Create or update secret: projects/${projectId}/secrets/${secretName}`
   )
-  t.ok(
-    mockLoggerInfo.calledWith(
-      'The secret version does not require to be updated.'
-    )
+  sinon.assert.calledWith(
+    mockLoggerInfo,
+    'The secret version does not require to be updated.'
   )
 })
 
-t.test('the secret check throws an error', async t => {
+t.test('the secret check throws an error', async () => {
   const projectId = 'proj1'
   const secretName = 'secret-name'
   const newValue = 'secret-value'
 
   mockGetSecret
     .withArgs({ name: `projects/${projectId}/secrets/${secretName}` })
-    .throws(new Error('some error'))
+    .rejects(new Error('some error'))
 
   await upsertSecret(projectId, secretName, newValue)
 
-  t.ok(mockSetFailed.calledWith('some error'))
+  sinon.assert.calledWith(mockSetFailed, 'some error')
 })
 
-t.test('the version check throws an error', async t => {
+t.test('the version check throws an error', async () => {
   const projectId = 'proj1'
   const secretName = 'secret-name'
   const newValue = 'secret-value'
 
   mockGetSecret
     .withArgs({ name: `projects/${projectId}/secrets/${secretName}` })
-    .returns(Promise.resolve())
+    .resolves()
 
   mockAccessSecretVersion
     .withArgs({
       name: `projects/${projectId}/secrets/${secretName}/versions/latest`
     })
-    .throws(new Error('another error'))
+    .rejects(new Error('another error'))
 
   await upsertSecret(projectId, secretName, newValue)
 
-  t.ok(mockSetFailed.calledWith('another error'))
+  sinon.assert.calledWith(mockSetFailed, 'another error')
 })
