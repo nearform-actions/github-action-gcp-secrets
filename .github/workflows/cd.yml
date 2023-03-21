@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - feat/get-secret
   workflow_dispatch:
 
 permissions:
