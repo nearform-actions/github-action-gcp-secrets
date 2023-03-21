@@ -38,7 +38,7 @@ jobs:
 
       - uses: ./
         with:
-          secrets: ${{ input.SECRETS }}
+          secrets: ${{ inputs.SECRETS }}
           secret_name: test-action
           secret_value: ${{ secrets.TEST_SECRET_VALUE }}
 
