@@ -13,6 +13,10 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - run: npm ci
+      shell: bash
+    - run: npm build
+      shell: bash
     - run: node ./dist/index.js
       shell: bash
       env:
