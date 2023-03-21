@@ -16,6 +16,6 @@ runs:
     - run: node ./dist/index.js
       shell: bash
       env:
-        SECRET_NAME: ${{ github.secret_name }}
+        SECRET_NAME: ${{ inputs.secret_name }}
         SECRET_VALUE: ${{ inputs.secret_value }}
         PROJECT_ID: ${{ inputs.project_id }}
