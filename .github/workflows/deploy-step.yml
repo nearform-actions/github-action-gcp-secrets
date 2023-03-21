@@ -10,6 +10,9 @@ on:
       GCP_SERVICE_ACCOUNT:
         required: true
         type: string
+      SECRETS:
+        required: true
+        type: string
 
 jobs:
   provision:
@@ -35,6 +38,7 @@ jobs:
 
       - uses: ./
         with:
+          secrets: ${{ input.SECRETS }}
           secret_name: test-action
           secret_value: ${{ secrets.TEST_SECRET_VALUE }}
 

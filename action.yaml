@@ -1,6 +1,8 @@
 name: 'Gcp Secrets'
 description: 'Upsert a secret on GCLOUD if is changed'
 inputs:
+  secrets: # id of input
+    description: 'The secrets list'
   secret_name: # id of input
     description: 'The secret name'
     required: true
@@ -23,3 +25,4 @@ runs:
         SECRET_NAME: ${{ inputs.secret_name }}
         SECRET_VALUE: ${{ inputs.secret_value }}
         PROJECT_ID: ${{ inputs.project_id }}
+        SECRETS: ${{ inputs.secrets }}
