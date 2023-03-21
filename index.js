@@ -3,10 +3,10 @@ const upsertSecret = require('./src/upsert-secret')
 
 async function run() {
   try {
-    const projectId =
-      core.getInput('project_id') || process.env.GOOGLE_CLOUD_PROJECT
-    const secretName = core.getInput('secret_name')
-    const secretValue = core.getInput('secret_value')
+    const projectId = process.env.PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT
+    // core.getInput('project_id')
+    const secretName = process.env.SECRET_NAME // core.getInput('secret_name')
+    const secretValue = process.env.SECRET_VALUE // core.getInput('secret_value')
 
     await upsertSecret(projectId, secretName, secretValue)
   } catch (error) {
