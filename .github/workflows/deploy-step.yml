@@ -10,9 +10,6 @@ on:
       GCP_SERVICE_ACCOUNT:
         required: true
         type: string
-      SECRETS:
-        required: true
-        type: string
       SECRET_1:
         required: true
         type: string
@@ -47,8 +44,6 @@ jobs:
           secrets: |-
             secret1:"${{ inputs.SECRET_1 }}"
             secret2:"${{ inputs.SECRET_2 }}"
-          secret_name: test-action
-          secret_value: ${{ secrets.TEST_SECRET_VALUE }}
 
       - name: 'Show summary'
         run: >-
