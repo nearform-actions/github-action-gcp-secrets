@@ -22,6 +22,7 @@ async function shouldUpdateVersion(secretName, newValue, client) {
     const [version] = await client.accessSecretVersion({
       name: `${secretName}/versions/latest`
     })
+
     const payload = version.payload.data.toString()
 
     return payload !== newValue
@@ -48,6 +49,7 @@ async function upsertSecret(projectId, secretName, newValue) {
 
     if (!exists) {
       core.info('The secret does not exist, create a new one.')
+
       client.createSecret({
         parent,
         secretId: secretName,
@@ -60,6 +62,7 @@ async function upsertSecret(projectId, secretName, newValue) {
     } else {
       core.info('The secret already exists.')
     }
+
     const shouldUpdate = await shouldUpdateVersion(
       fullSecretName,
       newValue,
@@ -82,7 +85,7 @@ async function upsertSecret(projectId, secretName, newValue) {
     }
     return
   } catch (error) {
-    console.log(error)
+    core.error(error)
     core.setFailed(error.message)
   }
 }

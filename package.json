@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 0",
+    "test": "tap 'test/**/**.test.js' --jobs=1",
     "prepare": "npx husky install",
     "build": "ncc build index.js --license licenses.txt"
   },
@@ -28,7 +28,9 @@
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",
-    "prettier": "^2.8.4"
+    "prettier": "^2.8.4",
+    "sinon": "^15.0.2",
+    "tap": "^16.3.4"
   },
   "lint-staged": {
     "*.{js,jsx}": "eslint --cache --fix"

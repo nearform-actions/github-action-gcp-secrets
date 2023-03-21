@@ -8,3 +8,8 @@ node_modules
 
 # OS X
 .DS_Store
+.nyc_output
+
+dist/proto
+dist/protos
+dist/protos.json
