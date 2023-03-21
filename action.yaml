@@ -1,9 +1,9 @@
 name: 'Gcp Secrets'
 description: 'Upsert a secret on GCLOUD if is changed'
 inputs:
-  secrets: # id of input
+  secrets:
     description: 'The secrets list'
-  project_id: # id of input
+  project_id:
     description: 'the project identifier'
     required: false
 runs:
