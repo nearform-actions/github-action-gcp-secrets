@@ -15,7 +15,7 @@ runs:
   steps:
     - run: npm ci
       shell: bash
-    - run: npm build
+    - run: npm run build
       shell: bash
     - run: node ./dist/index.js
       shell: bash
