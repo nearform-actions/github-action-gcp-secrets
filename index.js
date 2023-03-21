@@ -8,6 +8,8 @@ async function run() {
     const secretName = process.env.SECRET_NAME // core.getInput('secret_name')
     const secretValue = process.env.SECRET_VALUE // core.getInput('secret_value')
 
+    console.log('ProjectId: ', projectId)
+    console.log('Secret Name: ', secretName)
     await upsertSecret(projectId, secretName, secretValue)
   } catch (error) {
     core.error(error)
