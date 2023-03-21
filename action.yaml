@@ -1,18 +1,17 @@
 name: 'Gcp Secrets'
 description: 'Upsert a secret on GCLOUD if is changed'
 inputs:
-  secret_name:  # id of input
+  secret_name: # id of input
     description: 'The secret name'
     required: true
-  secret_value:  # id of input
+  secret_value: # id of input
     description: 'The secret value'
     required: true
-  project_id:  # id of input
+  project_id: # id of input
     description: 'the project identifier'
     required: false
-outputs:
-  time: # output will be available to future steps
-    description: 'The current time after waiting'
 runs:
-  using: 'node16'
-  main: './dist/index.js'
+  using: 'composite'
+  steps:
+    - run: node ./dist/index.js
+      shell: bash
