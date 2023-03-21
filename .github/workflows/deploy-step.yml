@@ -13,6 +13,12 @@ on:
       SECRETS:
         required: true
         type: string
+      SECRET_1:
+        required: true
+        type: string
+      SECRET_2:
+        required: true
+        type: string
 
 jobs:
   provision:
@@ -38,7 +44,9 @@ jobs:
 
       - uses: ./
         with:
-          secrets: ${{ inputs.SECRETS }}
+          secrets: |-
+            secret1:"${{ inputs.SECRET_1 }}"
+            secret2:"${{ inputs.SECRET_2 }}"
           secret_name: test-action
           secret_value: ${{ secrets.TEST_SECRET_VALUE }}
 

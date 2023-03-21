@@ -19,4 +19,6 @@ jobs:
       GCP_SERVICE_ACCOUNT: ${{ vars.GCP_SERVICE_ACCOUNT }}
       GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
       SECRETS: ${{ vars.SECRETS }}
+      SECRET_1: ${{ vars.SECRET_1 }}
+      SECRET_2: ${{ vars.SECRET_2 }}
     secrets: inherit
