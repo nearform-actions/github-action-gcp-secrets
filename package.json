@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "tap 'test/**/*.test.js' --jobs=1",
+    "dev": "node indexDev.js",
     "prepare": "npx husky install",
     "build": "ncc build index.js --license licenses.txt"
   },

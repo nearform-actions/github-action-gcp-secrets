@@ -2,7 +2,7 @@ const upsertSecret = require('./src/upsert-secret')
 
 async function run() {
   try {
-    const projectId = 'slack-kb-chatgpt-responder'
+    const projectId = 'github-action-gcp-secrets'
     const secretName = `test-action`
     const secretValue = `new-value`
     console.log(

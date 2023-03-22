@@ -1,0 +1,39 @@
+name: End 2 end test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  provision:
+    name: 'Provision and deploy'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: 'Authenticate with GCP'
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+
+      - name: 'Set up Cloud SDK'
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+
+      - uses: ./
+        with:
+          secrets: |-
+            secret1:"${{ vars.SECRET_1 }}"
+            secret2:"${{ vars.SECRET_2 }}"
+
+      - name: 'Show summary'
+        run: >-
+          echo "End 2 end test success."
