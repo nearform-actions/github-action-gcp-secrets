@@ -50,7 +50,7 @@ async function upsertSecret(projectId, secretName, newValue) {
     if (!exists) {
       core.info('The secret does not exist, create a new one.')
 
-      client.createSecret({
+      await client.createSecret({
         parent,
         secretId: secretName,
         secret: {
