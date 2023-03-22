@@ -1,4 +1,4 @@
-name: End 2 end test
+name: Continuous integration E2E
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
   pull_request:
 
 jobs:
-  provision:
-    name: 'Provision and deploy'
+  e2e:
+    name: 'End 2 end test'
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
