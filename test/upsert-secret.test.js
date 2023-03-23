@@ -72,9 +72,12 @@ t.test('the secret does not exists', async () => {
   sinon.assert.calledOnce(mockCreateSecret)
   sinon.assert.calledWith(
     mockLoggerInfo,
-    `Create or update secret: projects/${projectId}/secrets/${secretName}`
+    `[projects/proj1/secrets/secret-name]: Start creation or update.`
   )
-  sinon.assert.calledWith(mockLoggerInfo, 'Added secret version 1')
+  sinon.assert.calledWith(
+    mockLoggerInfo,
+    '[projects/proj1/secrets/secret-name]: Added secret version 1.'
+  )
 })
 
 t.test('the secret exists and and has different value', async () => {
@@ -113,11 +116,17 @@ t.test('the secret exists and and has different value', async () => {
   sinon.assert.notCalled(mockCreateSecret)
   sinon.assert.calledWith(
     mockLoggerInfo,
-    `Create or update secret: projects/${projectId}/secrets/${secretName}`
+    `[projects/proj1/secrets/secret-name]: Start creation or update.`
   )
 
-  sinon.assert.calledWith(mockLoggerInfo, 'The secret already exists.')
-  sinon.assert.calledWith(mockLoggerInfo, 'Added secret version 2')
+  sinon.assert.calledWith(
+    mockLoggerInfo,
+    '[projects/proj1/secrets/secret-name]: The secret already exists.'
+  )
+  sinon.assert.calledWith(
+    mockLoggerInfo,
+    '[projects/proj1/secrets/secret-name]: Added secret version 2.'
+  )
 })
 
 t.test('the secret exists and has the same value', async () => {
@@ -156,11 +165,11 @@ t.test('the secret exists and has the same value', async () => {
   sinon.assert.notCalled(mockCreateSecret)
   sinon.assert.calledWith(
     mockLoggerInfo,
-    `Create or update secret: projects/${projectId}/secrets/${secretName}`
+    `[projects/proj1/secrets/secret-name]: Start creation or update.`
   )
   sinon.assert.calledWith(
     mockLoggerInfo,
-    'The secret version does not require to be updated.'
+    '[projects/proj1/secrets/secret-name]: The version does not require to be updated.'
   )
 })
 

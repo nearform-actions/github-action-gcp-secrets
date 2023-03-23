@@ -40,7 +40,7 @@ async function shouldUpdateVersion(secretName, newValue) {
 async function upsertSecret(projectId, secretName, newValue) {
   const parent = `projects/${projectId}`
   const fullSecretName = `${parent}/secrets/${secretName}`
-  core.info(`[${fullSecretName}]: Start creation or update`)
+  core.info(`[${fullSecretName}]: Start creation or update.`)
 
   try {
     const exists = await secretExists(fullSecretName)
@@ -75,7 +75,7 @@ async function upsertSecret(projectId, secretName, newValue) {
         }
       })
 
-      core.info(`[${fullSecretName}]: Added secret version ${version.name}`)
+      core.info(`[${fullSecretName}]: Added secret version ${version.name}.`)
     } else {
       core.info(
         `[${fullSecretName}]: The version does not require to be updated.`
