@@ -37,24 +37,35 @@ jobs:
       - uses: ./
         with:
           secrets: |-
-            secret1:"${{ vars.SECRET_1 }}"
-            secret2:"${{ vars.SECRET_2 }}"
+            secret1:"secret-value-1"
+            secret2:"secret-value-2"
 
       - name: 'Check the secrets are created'
         run: |
-          node scripts/verify-secret.js ${{ vars.GCP_PROJECT_ID }} secret1 1 "${{ vars.SECRET_1 }}"
-          node scripts/verify-secret.js ${{ vars.GCP_PROJECT_ID }} secret2 1 "${{ vars.SECRET_2 }}"
+          node scripts/verify-secret.js ${{ vars.GCP_PROJECT_ID }} secret1 1 secret-value-1"
+          node scripts/verify-secret.js ${{ vars.GCP_PROJECT_ID }} secret2 1 secret-value-2"
 
       - uses: ./
         with:
           secrets: |-
-            secret1:"${{ vars.SECRET_1 }}"
-            secret2:"${{ vars.SECRET_2 }}"
+            secret1:"secret-value-1"
+            secret2:"secret-value-2"
+
+      - name: 'Check the secrets are not updated'
+        run: |
+          node scripts/verify-secret.js ${{ vars.GCP_PROJECT_ID }} secret1 1 secret-value-1"
+          node scripts/verify-secret.js ${{ vars.GCP_PROJECT_ID }} secret2 1 secret-value-2"
+
+      - uses: ./
+        with:
+          secrets: |-
+            secret1:"secret-value-1-new"
+            secret2:"secret-value-2-new"
 
       - name: 'Check the secrets are created'
         run: |
-          node scripts/verify-secret.js ${{ vars.GCP_PROJECT_ID }} secret1 1 "${{ vars.SECRET_1 }}"
-          node scripts/verify-secret.js ${{ vars.GCP_PROJECT_ID }} secret2 2 "new-value"
+          node scripts/verify-secret.js ${{ vars.GCP_PROJECT_ID }} secret1 2 secret-value-1-new
+          node scripts/verify-secret.js ${{ vars.GCP_PROJECT_ID }} secret2 2 secret-value-2-new
 
       - name: 'Show summary'
         run: >-
