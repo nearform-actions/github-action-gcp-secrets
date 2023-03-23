@@ -34,7 +34,7 @@ async function verifySecret() {
     const storedSecret = version.payload.data.toString()
     if (process.argv[5] && storedSecret !== process.argv[5]) {
       throw new Error(
-        `[${fullSecretName}]: The value of the secret is not wath was expected.`
+        `[${fullSecretName}]: The value of the secret is not what was expected.`
       )
     }
 
