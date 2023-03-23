@@ -40,6 +40,22 @@ jobs:
             secret1:"${{ vars.SECRET_1 }}"
             secret2:"${{ vars.SECRET_2 }}"
 
+      - name: 'Check the secrets are created'
+        run: |
+          node scripts/verify-secret.js ${{ vars.GCP_PROJECT_ID }} secret1 1 "${{ vars.SECRET_1 }}"
+          node scripts/verify-secret.js ${{ vars.GCP_PROJECT_ID }} secret2 1 "${{ vars.SECRET_2 }}"
+
+      - uses: ./
+        with:
+          secrets: |-
+            secret1:"${{ vars.SECRET_1 }}"
+            secret2:"${{ vars.SECRET_2 }}-new-value"    
+
+      - name: 'Check the secrets are created'
+        run: |
+          node scripts/verify-secret.js ${{ vars.GCP_PROJECT_ID }} secret1 1 "${{ vars.SECRET_1 }}"
+          node scripts/verify-secret.js ${{ vars.GCP_PROJECT_ID }} secret2 2 "${{ vars.SECRET_2 }}-new-value"
+
       - name: 'Show summary'
         run: >-
           echo "End 2 end test success."
