@@ -2,9 +2,11 @@ const core = require('@actions/core')
 
 const { SecretManagerServiceClient } = require('@google-cloud/secret-manager')
 
-async function existsSecret(secretName, client) {
+const secretManagerServiceClient = new SecretManagerServiceClient()
+
+async function secretExists(secretName) {
   try {
-    await client.getSecret({
+    await secretManagerServiceClient.getSecret({
       name: secretName
     })
     return true
@@ -17,9 +19,9 @@ async function existsSecret(secretName, client) {
   }
 }
 
-async function shouldUpdateVersion(secretName, newValue, client) {
+async function shouldUpdateVersion(secretName, newValue) {
   try {
-    const [version] = await client.accessSecretVersion({
+    const [version] = await secretManagerServiceClient.accessSecretVersion({
       name: `${secretName}/versions/latest`
     })
 
@@ -36,21 +38,19 @@ async function shouldUpdateVersion(secretName, newValue, client) {
 }
 
 async function upsertSecret(projectId, secretName, newValue) {
+  const parent = `projects/${projectId}`
+  const fullSecretName = `${parent}/secrets/${secretName}`
+  core.info(`[${fullSecretName}]: Start creation or update`)
+
   try {
-    const parent = `projects/${projectId}`
-    const fullSecretName = `${parent}/secrets/${secretName}`
-    // `who-to-greet` input defined in action metadata file
-    core.info(`Create or update secret: ${fullSecretName}`)
-
-    // slack-kb-chatgpt-responder
-    const client = new SecretManagerServiceClient()
-
-    const exists = await existsSecret(fullSecretName, client)
+    const exists = await secretExists(fullSecretName)
 
     if (!exists) {
-      core.info('The secret does not exist, create a new one.')
+      core.info(
+        `[${fullSecretName}]: The secret doesn't exist, create a new one.`
+      )
 
-      await client.createSecret({
+      await secretManagerServiceClient.createSecret({
         parent,
         secretId: secretName,
         secret: {
@@ -60,32 +60,30 @@ async function upsertSecret(projectId, secretName, newValue) {
         }
       })
     } else {
-      core.info('The secret already exists.')
+      core.info(`[${fullSecretName}]: The secret already exists.`)
     }
 
-    const shouldUpdate = await shouldUpdateVersion(
-      fullSecretName,
-      newValue,
-      client
-    )
+    const shouldUpdate = await shouldUpdateVersion(fullSecretName, newValue)
 
     if (shouldUpdate) {
-      core.info('The secret version requires to be updated.')
+      core.info(`[${fullSecretName}]: The version requires to be updated.`)
       const payload = Buffer.from(newValue, 'utf8')
-      const [version] = await client.addSecretVersion({
+      const [version] = await secretManagerServiceClient.addSecretVersion({
         parent: fullSecretName,
         payload: {
           data: payload
         }
       })
 
-      core.info(`Added secret version ${version.name}`)
+      core.info(`[${fullSecretName}]: Added secret version ${version.name}`)
     } else {
-      core.info('The secret version does not require to be updated.')
+      core.info(
+        `[${fullSecretName}]: The version does not require to be updated.`
+      )
     }
     return
   } catch (error) {
-    core.error(error)
+    core.error(`[${fullSecretName}]: error`, error)
     core.setFailed(error.message)
   }
 }
