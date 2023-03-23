@@ -28,11 +28,13 @@ async function deleteSecret() {
     process.exit(0)
   } catch (e) {
     if (e.message.startsWith('5 NOT_FOUND:')) {
-      console.log(`[${fullSecretName}] Secret not found, ne need to delete.`)
+      console.log(
+        `[${fullSecretName}]: Secret not found, no need to delete it.`
+      )
       process.exit(0)
     }
 
-    console.error(e.message)
+    console.error(`ERROR [${fullSecretName}]:`, e.message)
     process.exit(1)
   }
 }
