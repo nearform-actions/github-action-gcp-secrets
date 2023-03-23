@@ -30,14 +30,18 @@ jobs:
 
       - name: 'Remove the existent secrets'
         run: |
-          if gcloud secrets describe secret1; then
+          if gcloud secrets describe secret1 ; then
             gcloud secrets delete secret1 -q
+          else
+            echo "Secret 'secret1' does not exists"
+          fi      
+          
+          if gcloud secrets describe secret2 ; then
+            gcloud secrets delete secret2 -q
+          else
+            echo "Secret 'secret2' does not exists"
           fi
           
-           gcloud secrets describe secret2; then
-            gcloud secrets delete secret2 -q
-          fi
-
       - uses: ./
         with:
           secrets: |-
