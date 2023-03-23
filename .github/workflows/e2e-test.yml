@@ -49,12 +49,12 @@ jobs:
         with:
           secrets: |-
             secret1:"${{ vars.SECRET_1 }}"
-            secret2:"${{ vars.SECRET_2 }}-new-value"    
+            secret2:"new-value"    
 
       - name: 'Check the secrets are created'
         run: |
           node scripts/verify-secret.js ${{ vars.GCP_PROJECT_ID }} secret1 1 "${{ vars.SECRET_1 }}"
-          node scripts/verify-secret.js ${{ vars.GCP_PROJECT_ID }} secret2 2 "${{ vars.SECRET_2 }}-new-value"
+          node scripts/verify-secret.js ${{ vars.GCP_PROJECT_ID }} secret2 2 "new-value"
 
       - name: 'Show summary'
         run: >-
