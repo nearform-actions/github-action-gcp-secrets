@@ -1,25 +1,26 @@
 {
-  "name": "hub-template",
+  "name": "github-action-gcp-secrets",
   "version": "1.0.0",
   "description": "Template to start a new repository on the hub",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "prepare": "husky install"
+    "test": "tap 'test/**/*.test.js' --jobs=1",
+    "dev": "node indexDev.js",
+    "prepare": "npx husky install",
+    "build": "ncc build index.js --license licenses.txt"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nearform/hub-template.git"
+    "url": "git+https://github.com/nearform-actions/github-action-gcp-secrets.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nearform/hub-template/issues"
+    "url": "https://github.com/nearform-actions/github-action-gcp-secrets/issues"
   },
-  "homepage": "https://github.com/nearform/hub-template#readme",
+  "homepage": "https://github.com/nearform-actions/github-action-gcp-secrets#readme",
   "devDependencies": {
     "@commitlint/cli": "^17.5.0",
     "@commitlint/config-conventional": "^17.4.4",
@@ -28,9 +29,20 @@
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",
-    "prettier": "^2.8.6"
+    "prettier": "^2.8.6",
+    "sinon": "^15.0.2",
+    "tap": "^16.3.4"
   },
   "lint-staged": {
     "*.{js,jsx}": "eslint --cache --fix"
+  },
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@actions/github": "^5.1.1",
+    "@actions/tool-cache": "^2.0.1",
+    "@google-cloud/secret-manager": "^4.2.1",
+    "@google-github-actions/setup-cloud-sdk": "^1.1.1",
+    "@vercel/ncc": "^0.36.1",
+    "csv-parse": "^5.3.6"
   }
 }
