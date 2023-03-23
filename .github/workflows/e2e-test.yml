@@ -49,7 +49,7 @@ jobs:
         with:
           secrets: |-
             secret1:"${{ vars.SECRET_1 }}"
-            secret2:"new-value"    
+            secret2:"${{ vars.SECRET_2 }}"
 
       - name: 'Check the secrets are created'
         run: |
