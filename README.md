@@ -35,7 +35,7 @@ jobs:
         with:
           project_id: ${{ inputs.GCP_PROJECT_ID }}
 
-      - uses: ./
+      - uses: nearform-actions/github-action-gcp-secrets@v1
         with:
           secrets: |-
             secret1:"${{ secrets.SECRET_1 }}"
