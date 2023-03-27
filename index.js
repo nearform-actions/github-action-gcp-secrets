@@ -14,9 +14,11 @@ secrets: |-
 
 async function run() {
   try {
-    const projectId = process.env.PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT
+    const projectId =
+      core.getInput('project_id') || process.env.GOOGLE_CLOUD_PROJECT
+    const secretsValue = core.getInput('secrets')
 
-    const secrets = getSecretList(process.env.SECRETS)
+    const secrets = getSecretList(secretsValue)
 
     if (!secrets.length) {
       core.error('No secrets found.')
