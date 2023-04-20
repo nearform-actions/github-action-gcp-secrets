@@ -6,10 +6,10 @@ The secret is created if it doesn't exist; a new version is added if the new one
 
 ## Input
 
-| input      | required | description |
-|------------|----------|-------------|
-| secrets    | yes      | The list of secrets. <br />The attribute should be passed as a multiline string in the format `secret-name:secret-value` for each secret. |
-| project_id | no       | The GCP project identifier. If this parameter is not set, the default project is used. |
+| input        | required | description |
+|--------------|----------|-------------|
+| `secrets`    | yes      | The list of secrets. <br />The attribute should be passed as a multiline string in the format `secret-name:secret-value` for each secret. |
+| `project_id` | no       | The GCP project identifier. If this parameter is not set, the default project is used. |
 
 
 Since the `secrets` are multiline, the `quote` is required. E.g:
