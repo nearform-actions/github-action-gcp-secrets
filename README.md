@@ -4,9 +4,20 @@ GitHub action to create or update GCP secrets only if required.
 The secret is created if it doesn't exist; a new version is added if the new one is different from the last version.
 
 
-## Input / Output
+## Input
 
-See [action.yml](action.yaml).
+| input        | required | description |
+|--------------|----------|-------------|
+| `secrets`    | yes      | The list of secrets. <br />The attribute should be passed as a multiline string in the format `secret-name:secret-value` for each secret. |
+| `project_id` | no       | The GCP project identifier. If this parameter is not set, the default project is used. |
+
+
+Since the `secrets` are multiline, the `quote` is required. E.g:
+
+```yaml
+secret1:"${{ secrets.SECRET_1 }}"
+secret2:"${{ secrets.SECRET_2 }}"
+```
 
 ## Standard Usage
 
@@ -43,23 +54,3 @@ jobs:
 
      ...
 ```
-
-The `secrets` attribute should be passed as a multiline string.
-
-### Parameters
-
-*project_id*
-
-The GCP project identifier. If this parameter is not set, the default project is used. 
-
-*secrets*
-
-The list of secrets. The attribute should be passed as a multiline string in the format `secret-name:secret-value` for each secret.
-
-Eg. 
-```yaml
-secret1:"${{ secrets.SECRET_1 }}"
-secret2:"${{ secrets.SECRET_2 }}"
-```
-
-The `quote` is required if the secret is multiline. 
