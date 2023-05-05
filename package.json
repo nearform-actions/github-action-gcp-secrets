@@ -43,6 +43,6 @@
     "@google-cloud/secret-manager": "^4.2.2",
     "@google-github-actions/setup-cloud-sdk": "^1.1.1",
     "@vercel/ncc": "^0.36.1",
-    "csv-parse": "^5.3.9"
+    "csv-parse": "^5.3.10"
   }
 }
