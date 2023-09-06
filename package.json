@@ -42,7 +42,7 @@
     "@actions/tool-cache": "^2.0.1",
     "@google-cloud/secret-manager": "^5.0.0",
     "@google-github-actions/setup-cloud-sdk": "^1.1.2",
-    "@vercel/ncc": "^0.36.1",
+    "@vercel/ncc": "^0.38.0",
     "csv-parse": "^5.5.0"
   }
 }
