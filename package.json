@@ -1,6 +1,6 @@
 {
   "name": "github-action-gcp-secrets",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "Template to start a new repository on the hub",
   "main": "index.js",
   "scripts": {
