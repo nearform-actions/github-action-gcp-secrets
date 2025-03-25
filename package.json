@@ -30,7 +30,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.5.0",
     "prettier": "^2.8.8",
-    "sinon": "^19.0.4",
+    "sinon": "^20.0.0",
     "tap": "^16.3.8"
   },
   "lint-staged": {
