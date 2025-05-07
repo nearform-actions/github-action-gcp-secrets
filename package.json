@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@actions/core": "^1.11.1",
-    "@actions/github": "^6.0.0",
+    "@actions/github": "^6.0.1",
     "@actions/tool-cache": "^2.0.2",
     "@google-cloud/secret-manager": "^6.0.1",
     "@google-github-actions/setup-cloud-sdk": "^1.1.9",
